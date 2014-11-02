@@ -111,7 +111,8 @@
             restrict: 'A',
             require: '?ngModel',
             scope: {
-                key: '='
+                key: '=',
+                input_attrs: '='
             },
             link: function (scope, elm, attrs, ctrl) {
 
@@ -135,6 +136,14 @@
 
                     reload = function () {
                         var inputs      = elm.find('input');
+                        try {
+                            var inputAttrs = scope.$eval(attrs.inputAttrs);
+//                            console.log('inputAttrs',  inputAttrs)
+                            inputs.attr(inputAttrs);
+                        } catch (e) {
+                            throw 'Cat not parse input_attrs attribute'
+                        }
+
                         challenge_input = angular.element(inputs[0]); // #recaptcha_challenge_field
                         response_input  = angular.element(inputs[1]); // #recaptcha_response_field
                         refresh();
